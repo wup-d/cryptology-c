@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class SM3 {
 
     public static void main(String[] args) throws IOException {
+        // test!
         System.out.println(doFinal("hello cryptology!"));
     }
 
