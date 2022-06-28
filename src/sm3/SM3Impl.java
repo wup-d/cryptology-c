@@ -1,9 +1,11 @@
+package sm3;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-public class SM3 {
+public class SM3Impl {
 
     public static void main(String[] args) throws IOException {
         // test!
@@ -189,6 +191,6 @@ public class SM3 {
     }
 
     private static String doFinal(String info) throws IOException {
-        return SM3.byteArrayToHexString(SM3.hash(info.getBytes()));
+        return SM3Impl.byteArrayToHexString(SM3Impl.hash(info.getBytes()));
     }
 }
