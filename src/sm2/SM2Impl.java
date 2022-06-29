@@ -121,15 +121,14 @@ public class SM2Impl {
         ECMultiplier multiplier = createBasePointMultiplier();
 
         org.bouncycastle.math.ec.ECPoint c1P;
-        ECPoint kPB;
+        ECPoint kPB = null;
         do {
             BigInteger k = nextK();
 
             c1P = multiplier.multiply(ecParams.getG(), k).normalize();
             // c1 = c1P.getEncoded(false);
-            kPB = ecKey.getParameters();
 
-            kdf(digest, kPB, c2);
+//            kdf(digest, kPB, c2);
         }
 
         while (notEncrypted(c2, in, inOff));
@@ -210,7 +209,7 @@ public class SM2Impl {
         }
 
         c1P = c1P.multiply(((ECPrivateKeyParameters)ecKey).getD()).normalize();
-        kdf(digest, c1P, inCipherData);
+//        kdf(digest, c1P, inCipherData);
 
         // 动态计算已解密的明文的摘要并比较
         byte[] cipherDigest = new byte[digest.getDigestSize()];
