@@ -34,7 +34,7 @@ public class SM2Impl {
     private SecureRandom random;
 
     /***
-     * Ä¬ÈÏ²ÉÓÃ¹ú±ê£ºC1||C3||C2
+     * é»˜è®¤é‡‡ç”¨å›½æ ‡ï¼šC1||C3||C2
      */
     public SM2Impl() {
         this(new SM3Digest(), Mode.C1C3C2);
@@ -57,9 +57,9 @@ public class SM2Impl {
     }
 
     /**
-     * ³õÊ¼»¯
-     * @param forEncryption true-¹«Ô¿¼ÓÃÜ, false-Ë½Ô¿½âÃÜ
-     * @param param ÃÜÂë²ÎÊı£¬´ÓÖĞ»ñÈ¡¹«»òË½Ô¿¡¢¼°ÍÖÔ²ÇúÏßÏà¹Ø²ÎÊı
+     * åˆå§‹åŒ–
+     * @param forEncryption true-å…¬é’¥åŠ å¯†, false-ç§é’¥è§£å¯†
+     * @param param å¯†ç å‚æ•°ï¼Œä»ä¸­è·å–å…¬æˆ–ç§é’¥ã€åŠæ¤­åœ†æ›²çº¿ç›¸å…³å‚æ•°
      */
     public void init(boolean forEncryption, CipherParameters param) {
         this.forEncryption = forEncryption;
@@ -85,7 +85,7 @@ public class SM2Impl {
     }
 
     /**
-     * ½øĞĞ¼ÓÃÜ¡¢»ò½âÃÜ
+     * è¿›è¡ŒåŠ å¯†ã€æˆ–è§£å¯†
      * @param in
      * @param inOff
      * @param inLen
@@ -172,12 +172,12 @@ public class SM2Impl {
             }
             int index = 0;
 
-            // C1 == XCoordinate ¡¢YCoordinate
+            // C1 == XCoordinate ã€YCoordinate
             BigInteger x = ((ASN1Integer) seq.getObjectAt(index ++)).getPositiveValue();
             // YCoordinate
             BigInteger y = ((ASN1Integer) seq.getObjectAt(index ++)).getPositiveValue();
 
-            // XCoord ¡¢YCoord ==> CEPoint (C1)
+            // XCoord ã€YCoord ==> CEPoint (C1)
             c1P = ecParams.getCurve().createPoint(x, y);
 
             // HASH (C3)
@@ -201,7 +201,7 @@ public class SM2Impl {
             System.arraycopy(in, inOff + c1.length + inCipherData.length, inHash, 0, inHash.length);
         }
 
-        // ½âÃÜ ==> inCipherData;
+        // è§£å¯† ==> inCipherData;
         org.bouncycastle.math.ec.ECPoint s = c1P.multiply(ecParams.getH());
         if (s.isInfinity())
         {
@@ -211,7 +211,7 @@ public class SM2Impl {
         c1P = c1P.multiply(((ECPrivateKeyParameters)ecKey).getD()).normalize();
 //        kdf(digest, c1P, inCipherData);
 
-        // ¶¯Ì¬¼ÆËãÒÑ½âÃÜµÄÃ÷ÎÄµÄÕªÒª²¢±È½Ï
+        // åŠ¨æ€è®¡ç®—å·²è§£å¯†çš„æ˜æ–‡çš„æ‘˜è¦å¹¶æ¯”è¾ƒ
         byte[] cipherDigest = new byte[digest.getDigestSize()];
         addFieldElement(digest, c1P.getXCoord().toBigInteger());
         digest.update(inCipherData, 0, inCipherData.length);
