@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="cryptology" options="--add-exports java.base/sun.security.rsa=ALL-UNNAMED" />
+      <module name="cryptology" options="" />
     </option>
   </component>
 </project>
