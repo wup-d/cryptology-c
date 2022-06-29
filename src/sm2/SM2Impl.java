@@ -209,7 +209,6 @@ public class SM2Impl {
         }
 
         c1P = c1P.multiply(((ECPrivateKeyParameters)ecKey).getD()).normalize();
-//        kdf(digest, c1P, inCipherData);
 
         // 动态计算已解密的明文的摘要并比较
         byte[] cipherDigest = new byte[digest.getDigestSize()];
