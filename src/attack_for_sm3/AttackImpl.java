@@ -49,6 +49,9 @@ public class AttackImpl {
         return res;
     }
 
+    /**
+     * 恢复方法
+     */
     private static String recovery(String r, String y, String a, int index, int cnt) {
         for (int i = index; i >= 0; i--) {
             System.out.println(a + " -- " + cnt);
@@ -64,6 +67,9 @@ public class AttackImpl {
         return a;
     }
 
+    /**
+     * 迭代方法
+     */
     private static String[] iterator() {
         String[] res = new String[256];
         int index = 0;
@@ -80,6 +86,9 @@ public class AttackImpl {
         return res;
     }
 
+    /**
+     * 生成组合
+     */
     private static String generate(int target) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < target; i++) {
@@ -88,6 +97,9 @@ public class AttackImpl {
         return sb.toString();
     }
 
+    /**
+     * 两个片段的异或操作
+     */
     private static String XOR(String R1, String R2) {
         R1 = hexadecimalToBinary(R1);
         R2 = hexadecimalToBinary(R2);
@@ -99,6 +111,9 @@ public class AttackImpl {
         return binaryToHexadecimal(sb.toString());
     }
 
+    /**
+     * 十六进制转二进制
+     */
     private static String hexadecimalToBinary(String s) {
         int n = s.length();
         StringBuffer binaryData = new StringBuffer();
@@ -117,6 +132,9 @@ public class AttackImpl {
         return binaryData.toString();
     }
 
+    /**
+     * 二进制转十进制
+     */
     private static String binaryToHexadecimal(String s) {
         int n = s.length();
         StringBuilder hexadecimalData = new StringBuilder();
@@ -150,6 +168,9 @@ public class AttackImpl {
         return hexadecimalData.toString();
     }
 
+    /**
+     * 加密测试
+     */
     private static String encrypt(String info) {
         // 执行exe: cmd = exe存放路径 + 空格 + 调用 exe 时需要传入的参数.
         String cmd = "D:/Users/27552/Desktop/PaddingOracleExp/12/enc_oracle.exe " + info;
@@ -179,6 +200,9 @@ public class AttackImpl {
         return res.substring(8);
     }
 
+    /**
+     * 解密测试
+     */
     private static boolean decrypt(String info) {
         // 执行exe: cmd = exe存放路径 + 空格 + 调用 exe 时需要传入的参数.
         String cmd = "D:/Users/27552/Desktop/PaddingOracleExp/12/dec_oracle.exe " + info;
