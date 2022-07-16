@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
- * one example for extension attack.
+ * example for length extension attack.
  */
 public class AttackImpl {
     private static final String[] IV_C = {"422f0657b5b92e635ebb918f8833bf5b", "4f4fdbb59e273255aa901b13fce6ef6e",
