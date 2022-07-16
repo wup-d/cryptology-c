@@ -100,33 +100,28 @@ public class SM3Impl {
     }
 
     private static byte[] CF(byte[] vi, byte[] bi) throws IOException {
-        int a = toInteger(vi, 0);
-        int b = toInteger(vi, 1);
-        int c = toInteger(vi, 2);
-        int d = toInteger(vi, 3);
-        int e = toInteger(vi, 4);
-        int f = toInteger(vi, 5);
-        int g = toInteger(vi, 6);
-        int h = toInteger(vi, 7);
+        int a = toInteger(vi, 0), b = toInteger(vi, 1), c = toInteger(vi, 2), d = toInteger(vi, 3);
+        int e = toInteger(vi, 4), f = toInteger(vi, 5), g = toInteger(vi, 6), h = toInteger(vi, 7);
 
-        int[] w = new int[68];
-        int[] w1 = new int[64];
+        int[] w = new int[68], w1 = new int[64];
         for (int i = 0; i < 16; i++) {
             w[i] = toInteger(bi, i);
         }
         for (int j = 16; j < 68; j++) {
-            w[j] = P1(w[j - 16] ^ w[j - 9] ^ Integer.rotateLeft(w[j - 3], 15))
-                    ^ Integer.rotateLeft(w[j - 13], 7) ^ w[j - 6];
+            w[j] = P1(w[j - 16] ^
+                    w[j - 9] ^
+                    Integer.rotateLeft(w[j - 3], 15)) ^
+                    Integer.rotateLeft(w[j - 13], 7) ^
+                    w[j - 6];
         }
         for (int j = 0; j < 64; j++) {
             w1[j] = w[j] ^ w[j + 4];
         }
-        int ss1, ss2, tt1, tt2;
         for (int j = 0; j < 64; j++) {
-            ss1 = Integer.rotateLeft(Integer.rotateLeft(a, 12) + e + Integer.rotateLeft(T(j), j), 7);
-            ss2 = ss1 ^ Integer.rotateLeft(a, 12);
-            tt1 = FF(a, b, c, j) + d + ss2 + w1[j];
-            tt2 = GG(e, f, g, j) + h + ss1 + w[j];
+            int ss1 = Integer.rotateLeft(Integer.rotateLeft(a, 12) + e + Integer.rotateLeft(T(j), j), 7);
+            int ss2 = ss1 ^ Integer.rotateLeft(a, 12);
+            int tt1 = FF(a, b, c, j) + d + ss2 + w1[j];
+            int tt2 = GG(e, f, g, j) + h + ss1 + w[j];
             d = c;
             c = Integer.rotateLeft(b, 9);
             b = a;
