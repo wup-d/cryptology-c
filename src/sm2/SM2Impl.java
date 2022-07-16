@@ -34,7 +34,7 @@ public class SM2Impl {
     private SecureRandom random;
 
     /***
-     * 默认采用国标：C1||C3||C2
+     * 默认采用：C1||C3||C2
      */
     public SM2Impl() {
         this(new SM3Digest(), Mode.C1C3C2);
@@ -57,9 +57,7 @@ public class SM2Impl {
     }
 
     /**
-     * 初始化
-     * @param forEncryption true-公钥加密, false-私钥解密
-     * @param param 密码参数，从中获取公或私钥、及椭圆曲线相关参数
+     * 初始化。 true-公钥加密, false-私钥解密。 密码参数，从中获取公或私钥、及椭圆曲线相关参数。
      */
     public void init(boolean forEncryption, CipherParameters param) {
         this.forEncryption = forEncryption;
@@ -86,11 +84,6 @@ public class SM2Impl {
 
     /**
      * 进行加密、或解密
-     * @param in
-     * @param inOff
-     * @param inLen
-     * @return
-     * @throws InvalidCipherTextException
      */
     public byte[] processBlock(
             byte[] in,
@@ -115,35 +108,23 @@ public class SM2Impl {
     private byte[] encrypt(byte[] in, int inOff, int inLen)
             throws IOException {
         byte[] c2 = new byte[inLen];
-
         System.arraycopy(in, inOff, c2, 0, c2.length);
-
         ECMultiplier multiplier = createBasePointMultiplier();
-
         org.bouncycastle.math.ec.ECPoint c1P;
         ECPoint kPB = null;
         do {
             BigInteger k = nextK();
-
             c1P = multiplier.multiply(ecParams.getG(), k).normalize();
-            // c1 = c1P.getEncoded(false);
-
-//            kdf(digest, kPB, c2);
-        }
-
-        while (notEncrypted(c2, in, inOff));
+        } while (notEncrypted(c2, in, inOff));
 
         byte[] c3 = new byte[digest.getDigestSize()];
-
         addFieldElement(digest, kPB.getAffineX());
         digest.update(in, inOff, inLen);
         addFieldElement(digest, kPB.getAffineY());
-
         digest.doFinal(c3, 0);
 
         switch (mode) {
             case C1C3C2:
-
                 final ASN1EncodableVector vector = new ASN1EncodableVector();
                 vector.add(new ASN1Integer(c1P.getXCoord().toBigInteger()));
                 vector.add(new ASN1Integer(c1P.getYCoord().toBigInteger()));
@@ -156,55 +137,37 @@ public class SM2Impl {
         }
     }
 
-    private byte[] decrypt(byte[] in, int inOff, int inLen)
-            throws InvalidCipherTextException, IOException {
+    private byte[] decrypt(byte[] in, int inOff, int inLen) throws InvalidCipherTextException, IOException {
 
-        org.bouncycastle.math.ec.ECPoint c1P; // = ecParams.getCurve().decodePoint(c1);
-        byte[] inHash ;
-        byte[] inCipherData;
+        org.bouncycastle.math.ec.ECPoint c1P;
+        byte[] inHash = null, inCipherData = null;
 
         if (mode == Mode.C1C3C2) {
-
             ASN1InputStream inputStream = new ASN1InputStream(in);
             ASN1Sequence seq = (ASN1Sequence) inputStream.readObject();
-            if (seq.size() != 4){
+            if (seq.size() != 4) {
                 throw new InvalidCipherTextException("invalid cipher text");
             }
             int index = 0;
-
-            // C1 == XCoordinate 、YCoordinate
-            BigInteger x = ((ASN1Integer) seq.getObjectAt(index ++)).getPositiveValue();
-            // YCoordinate
-            BigInteger y = ((ASN1Integer) seq.getObjectAt(index ++)).getPositiveValue();
-
-            // XCoord 、YCoord ==> CEPoint (C1)
+            BigInteger x = ((ASN1Integer) seq.getObjectAt(index++)).getPositiveValue();
+            BigInteger y = ((ASN1Integer) seq.getObjectAt(index++)).getPositiveValue();
             c1P = ecParams.getCurve().createPoint(x, y);
-
-            // HASH (C3)
             inHash = ((ASN1OctetString)seq.getObjectAt(index ++)).getOctets();
-
-            // CipherText (C2)
             inCipherData = ((ASN1OctetString)seq.getObjectAt(index)).getOctets();
         } else {
-            // C1
             byte[] c1 = new byte[curveLength * 2 + 1];
             System.arraycopy(in, inOff, c1, 0, c1.length);
             c1P = ecParams.getCurve().decodePoint(c1);
-
-            // C2 == inCipherData
             int digestSize = this.digest.getDigestSize();
             inCipherData = new byte[inLen - c1.length - digestSize];
             System.arraycopy(in, inOff + c1.length, inCipherData, 0, inCipherData.length);
-
-            // C3 == Hash
             inHash = new byte[digestSize];
             System.arraycopy(in, inOff + c1.length + inCipherData.length, inHash, 0, inHash.length);
         }
 
-        // 解密 ==> inCipherData;
+        // 解密
         org.bouncycastle.math.ec.ECPoint s = c1P.multiply(ecParams.getH());
-        if (s.isInfinity())
-        {
+        if (s.isInfinity()) {
             throw new InvalidCipherTextException("[h]C1 at infinity");
         }
 
@@ -219,8 +182,7 @@ public class SM2Impl {
         digest.doFinal(cipherDigest, 0);
 
         int check = 0;
-        if (mode == Mode.C1C3C2)
-        {
+        if (mode == Mode.C1C3C2) {
             for (int i = 0; i != cipherDigest.length; i++) {
                 check |= cipherDigest[i] ^ inHash[i];
             }
@@ -230,26 +192,19 @@ public class SM2Impl {
             }
         }
 
-        // Arrays.fill(c1, (byte)0);
         Arrays.fill(cipherDigest, (byte)0);
 
-        if (check != 0)
-        {
-            Arrays.fill(inCipherData, (byte)0);
+        if (check != 0) {
+            Arrays.fill(inCipherData, (byte) 0);
             throw new InvalidCipherTextException("invalid cipher text");
         }
-
-        // return c2;
         return inCipherData;
     }
 
     private boolean notEncrypted(byte[] encData, byte[] in, int inOff) {
         for (int i = 0; i != encData.length; i++) {
-            if (encData[i] != in[inOff + i]) {
-                return false;
-            }
+            if (encData[i] != in[inOff + i]) return false;
         }
-
         return true;
     }
 
@@ -258,8 +213,7 @@ public class SM2Impl {
         byte[] buf = new byte[Math.max(4, digestSize)];
         int off = 0;
 
-        Memoable memo = null;
-        Memoable copy = null;
+        Memoable memo = null, copy = null;
 
         if (digest instanceof Memoable) {
             addFieldElement(digest, c1.getAffineX());
@@ -300,15 +254,13 @@ public class SM2Impl {
         BigInteger k;
         do {
             k = BigIntegers.createRandomBigInteger(qBitLength, random);
-        }
-        while (k.equals(BigIntegers.ZERO) || k.compareTo(ecParams.getN()) >= 0);
+        } while (k.equals(BigIntegers.ZERO) || k.compareTo(ecParams.getN()) >= 0);
 
         return k;
     }
 
     private void addFieldElement(Digest digest, BigInteger v) {
         byte[] p = BigIntegers.asUnsignedByteArray(curveLength, v);
-
         digest.update(p, 0, p.length);
     }
 }
