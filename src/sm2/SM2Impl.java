@@ -33,9 +33,6 @@ public class SM2Impl {
     private int curveLength;
     private SecureRandom random;
 
-    /***
-     * 默认采用：C1||C3||C2
-     */
     public SM2Impl() {
         this(new SM3Digest(), Mode.C1C3C2);
     }

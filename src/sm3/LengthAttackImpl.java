@@ -1,24 +1,27 @@
 package sm3;
 
+import org.junit.Test;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
  * example for length extension attack.
  */
-public class AttackImpl {
-    private static final String[] IV_C = {"422f0657b5b92e635ebb918f8833bf5b", "4f4fdbb59e273255aa901b13fce6ef6e",
+public class LengthAttackImpl {
+    private static final String[] IV_C = {
+            "422f0657b5b92e635ebb918f8833bf5b", "4f4fdbb59e273255aa901b13fce6ef6e",
             "fd6e8dff7bd95abeb645135ca18bba95", "ba991d0f2a8ca27e61b9459499eeece6"};
-    private static final String[] replace = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0a", "0b", "0c", "0d", "0e", "0f",
+    private static final String[] replace = {
+            "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "0a", "0b", "0c", "0d", "0e", "0f",
             "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "1a", "1b", "1c", "1d", "1e", "1f",
             "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "2a", "2b", "2c", "2d", "2e", "2f",
             "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3a", "3b", "3c", "3d", "3e", "3f"};
-    private static final char[] cs = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    private static final char[] cs = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-
-    public static void main(String[] args) {
-        String m = "666c61677b62616533643365303263383139346532346330303264656332633638663666387d0a0a0a0a0a0a0a0a0a0a";
-
+    @Test
+    public void test(String[] args) {
         String a1 = recovery(IV_C[0], IV_C[1], "", 15, 0);
         String m1 = XOR(a1, IV_C[0]);
         String a2 = recovery(IV_C[1], IV_C[2], "", 15, 0);

@@ -1,5 +1,7 @@
 package sm3;
 
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -7,20 +9,15 @@ import java.util.Arrays;
 
 public class SM3Impl {
 
-    public static void main(String[] args) throws IOException {
-        // test!
-        System.out.println(doFinal("hello cryptology!"));
-    }
+    public static char[] hexDigits = "0123456789abcdef".toCharArray();
+    public static final String ivHexStr = "7380166f 4914b2b9 172442d7 da8a0600 a96f30bc 163138aa e38dee4d b0fb0e4e";
+    public static final BigInteger IV = new BigInteger(ivHexStr.replaceAll(" ", ""), 16);
+    public static final Integer Tj15 = Integer.valueOf("79cc4519", 16);
+    public static final Integer Tj63 = Integer.valueOf("7a879d8a", 16);
+    public static final byte[] FirstPadding = {(byte) 0x80};
+    public static final byte[] ZeroPadding = {(byte) 0x00};
 
-    private static char[] hexDigits = "0123456789abcdef".toCharArray();
-    private static final String ivHexStr = "7380166f 4914b2b9 172442d7 da8a0600 a96f30bc 163138aa e38dee4d b0fb0e4e";
-    private static final BigInteger IV = new BigInteger(ivHexStr.replaceAll(" ", ""), 16);
-    private static final Integer Tj15 = Integer.valueOf("79cc4519", 16);
-    private static final Integer Tj63 = Integer.valueOf("7a879d8a", 16);
-    private static final byte[] FirstPadding = {(byte) 0x80};
-    private static final byte[] ZeroPadding = {(byte) 0x00};
-
-    private static int T(int j) {
+    public static int T(int j) {
         if (j >= 0 && j <= 15) {
             return Tj15.intValue();
         } else if (j >= 16 && j <= 63) {
@@ -30,7 +27,7 @@ public class SM3Impl {
         }
     }
 
-    private static Integer FF(Integer x, Integer y, Integer z, int j) {
+    public static Integer FF(Integer x, Integer y, Integer z, int j) {
         if (j >= 0 && j <= 15) {
             return Integer.valueOf(x.intValue() ^ y.intValue() ^ z.intValue());
         } else if (j >= 16 && j <= 63) {
@@ -40,7 +37,7 @@ public class SM3Impl {
         }
     }
 
-    private static Integer GG(Integer x, Integer y, Integer z, int j) {
+    public static Integer GG(Integer x, Integer y, Integer z, int j) {
         if (j >= 0 && j <= 15) {
             return Integer.valueOf(x.intValue() ^ y.intValue() ^ z.intValue());
         } else if (j >= 16 && j <= 63) {
@@ -50,15 +47,15 @@ public class SM3Impl {
         }
     }
 
-    private static Integer P0(Integer x) {
+    public static Integer P0(Integer x) {
         return Integer.valueOf(x.intValue() ^ Integer.rotateLeft(x.intValue(), 9) ^ Integer.rotateLeft(x.intValue(), 17));
     }
 
-    private static Integer P1(Integer x) {
+    public static Integer P1(Integer x) {
         return Integer.valueOf(x.intValue() ^ Integer.rotateLeft(x.intValue(), 15) ^ Integer.rotateLeft(x.intValue(), 23));
     }
 
-    private static byte[] padding(byte[] source) throws IOException {
+    public static byte[] padding(byte[] source) throws IOException {
         if (source.length >= 0x2000000000000000l) {
             throw new RuntimeException("invalid data!");
         }
@@ -77,7 +74,7 @@ public class SM3Impl {
         return baos.toByteArray();
     }
 
-    private static byte[] long2bytes(long l) {
+    public static byte[] long2bytes(long l) {
         byte[] bytes = new byte[8];
         for (int i = 0; i < 8; i++) {
             bytes[i] = (byte) (l >>> ((7 - i) << 3));
@@ -99,7 +96,7 @@ public class SM3Impl {
         return vi1;
     }
 
-    private static byte[] CF(byte[] vi, byte[] bi) throws IOException {
+    public static byte[] CF(byte[] vi, byte[] bi) throws IOException {
         int a = toInteger(vi, 0), b = toInteger(vi, 1), c = toInteger(vi, 2), d = toInteger(vi, 3);
         int e = toInteger(vi, 4), f = toInteger(vi, 5), g = toInteger(vi, 6), h = toInteger(vi, 7);
 
@@ -138,7 +135,7 @@ public class SM3Impl {
         return v;
     }
 
-    private static int toInteger(byte[] source, int index) {
+    public static int toInteger(byte[] source, int index) {
         StringBuilder valueStr = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             valueStr.append(hexDigits[(byte) ((source[index * 4 + i] & 0xF0) >> 4)]);
@@ -148,7 +145,7 @@ public class SM3Impl {
 
     }
 
-    private static byte[] toByteArray(int a, int b, int c, int d, int e, int f, int g, int h) throws IOException {
+    public static byte[] toByteArray(int a, int b, int c, int d, int e, int f, int g, int h) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(32);
         baos.write(toByteArray(a));
         baos.write(toByteArray(b));
@@ -169,7 +166,8 @@ public class SM3Impl {
         byteArray[3] = (byte) (i & 0xFF);
         return byteArray;
     }
-    private static String byteToHexString(byte b) {
+
+    public static String byteToHexString(byte b) {
         int n = b;
         if (n < 0) n += 256;
         int d1 = n >> 4;
@@ -185,7 +183,10 @@ public class SM3Impl {
         return resultSb.toString();
     }
 
-    private static String doFinal(String info) throws IOException {
-        return SM3Impl.byteArrayToHexString(SM3Impl.hash(info.getBytes()));
+    @Test
+    public void SM3Test() throws IOException {
+        String info = "hello cryptology!";
+        System.out.println(SM3Impl.byteArrayToHexString(SM3Impl.hash(info.getBytes())));
+        ;
     }
 }
