@@ -17,26 +17,28 @@ public class PGPImplByHutool {
 
         String M = "PGPImpl";
 
-        // generate privateKey and publicKey
+        // generate privateKey and publicKey.
         KeyPair pair = SecureUtil.generateKeyPair("SM2");
         byte[] privateKey = pair.getPrivate().getEncoded();
         byte[] publicKey = pair.getPublic().getEncoded();
 
-        // Symmetric encryption
+        // generate symmetricCrypto obj.
         SymmetricCrypto symmetricCrypto = new SymmetricCrypto("RC2");
+
+        // Symmetric encryption.
         byte[] sym_encrypt = symmetricCrypto.encrypt(M.getBytes());
 
         SM2 sm2 = SmUtil.sm2(privateKey, publicKey);
 
-        // publicKey encryption
+        // publicKey encryption.
         String encrypt = sm2.encryptBcd(M, KeyType.PublicKey);
         System.out.println("encrypt: " + encrypt);
 
-        // privateKey decryption
+        // privateKey decryption.
         String decrypt = StrUtil.utf8Str(sm2.decryptFromBcd(encrypt, KeyType.PrivateKey));
         System.out.println("decrypt: " + decrypt);
 
-        // Symmetric decryption
+        // Symmetric decryption.
         byte[] sym_decrypt = symmetricCrypto.decrypt(decrypt.getBytes());
         System.out.println(StrUtil.utf8Str(sym_decrypt));
 
