@@ -85,11 +85,7 @@ public class SM2Impl {
     /**
      * 进行加密、或解密
      */
-    public byte[] processBlock(
-            byte[] in,
-            int inOff,
-            int inLen)
-            throws IOException, InvalidCipherTextException {
+    public byte[] processBlock(byte[] in, int inOff, int inLen) throws IOException, InvalidCipherTextException {
         if (forEncryption) {
             return encrypt(in, inOff, inLen);
         } else {
@@ -105,8 +101,7 @@ public class SM2Impl {
         return new FixedPointCombMultiplier();
     }
 
-    private byte[] encrypt(byte[] in, int inOff, int inLen)
-            throws IOException {
+    private byte[] encrypt(byte[] in, int inOff, int inLen) throws IOException {
         byte[] c2 = new byte[inLen];
         System.arraycopy(in, inOff, c2, 0, c2.length);
         ECMultiplier multiplier = createBasePointMultiplier();

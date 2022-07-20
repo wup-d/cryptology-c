@@ -1,4 +1,4 @@
-package attack_for_sm3;
+package sm3;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
