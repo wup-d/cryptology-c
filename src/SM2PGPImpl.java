@@ -1,5 +1,3 @@
-package sm2;
-
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.SmUtil;
@@ -10,7 +8,7 @@ import org.junit.Test;
 
 import java.security.KeyPair;
 
-public class PGPImplByHutool {
+public class SM2PGPImpl {
 
     @Test
     public void PGPTest() {
@@ -41,6 +39,5 @@ public class PGPImplByHutool {
         // Symmetric decryption.
         byte[] sym_decrypt = symmetricCrypto.decrypt(decrypt.getBytes());
         System.out.println(StrUtil.utf8Str(sym_decrypt));
-
     }
 }

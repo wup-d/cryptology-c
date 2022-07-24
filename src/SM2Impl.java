@@ -1,5 +1,3 @@
-package sm2;
-
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.Digest;

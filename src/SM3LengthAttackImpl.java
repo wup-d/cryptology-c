@@ -1,5 +1,3 @@
-package sm3;
-
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -8,7 +6,7 @@ import java.io.InputStreamReader;
 /**
  * example for length extension attack.
  */
-public class LengthAttackImpl {
+public class SM3LengthAttackImpl {
     private static final String[] IV_C = {
             "422f0657b5b92e635ebb918f8833bf5b", "4f4fdbb59e273255aa901b13fce6ef6e",
             "fd6e8dff7bd95abeb645135ca18bba95", "ba991d0f2a8ca27e61b9459499eeece6"};
