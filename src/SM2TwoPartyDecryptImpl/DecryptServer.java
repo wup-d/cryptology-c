@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class DecryptServer {
     public static void main(String args[]) throws Exception {
         // 监听指定的端口
         int port = 55533;
