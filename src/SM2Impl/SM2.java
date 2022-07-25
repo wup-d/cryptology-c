@@ -135,7 +135,7 @@ public class SM2 {
         System.arraycopy(C1Buffer, 0, encryptResult, 0, C1Buffer.length);
         System.arraycopy(C2, 0, encryptResult, C1Buffer.length, C2.length);
         System.arraycopy(C3, 0, encryptResult, C1Buffer.length + C2.length, C3.length);
-        System.out.print("密文: ");
+        System.out.print("encryptInfo: ");
         printHexString(encryptResult);
 
         return encryptResult;
@@ -157,7 +157,7 @@ public class SM2 {
         byte[] dBC1Bytes = dBC1.getEncoded(false);
         DerivationFunction kdf = new KDF1BytesGenerator(new ShortenedDigest(new SHA256Digest(), 20));
         int klen = encryptData.length - 65 - 20;
-        System.out.println("klen = " + klen);
+        // System.out.println("klen = " + klen);
 
         byte[] t = new byte[klen];
         kdf.init(new ISO18033KDFParameters(dBC1Bytes));
@@ -179,14 +179,14 @@ public class SM2 {
         byte[] u = calculateHash(dBC1.getXCoord().toBigInteger(), M, dBC1
                 .getYCoord().toBigInteger());
         if (Arrays.equals(u, C3)) {
-            System.out.println("解密成功");
+            System.out.println("successfully!");
             System.out.println("M' = " + new String(M));
         } else {
             System.out.print("u = ");
             printHexString(u);
             System.out.print("C3 = ");
             printHexString(C3);
-            System.err.println("解密验证失败");
+            System.err.println("failed!");
         }
     }
 
@@ -219,9 +219,9 @@ public class SM2 {
             BigInteger y = publicKey.getYCoord().toBigInteger();
             if (between(x, new BigInteger("0"), p) && between(y, new BigInteger("0"), p)) {
                 BigInteger xResult = x.pow(3).add(a.multiply(x)).add(b).mod(p);
-                System.out.println("xResult: " + xResult);
+                // System.out.println("xResult: " + xResult);
                 BigInteger yResult = y.pow(2).mod(p);
-                System.out.println("yResult: " + yResult);
+                // System.out.println("yResult: " + yResult);
                 if (yResult.equals(xResult) && publicKey.multiply(n).isInfinity()) {
                     return true;
                 }
