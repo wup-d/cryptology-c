@@ -12,7 +12,7 @@ public class Client {
         Socket socket = new Socket(host, port);
         // 建立连接后获得输出流
         OutputStream outputStream = socket.getOutputStream();
-        String message = "1111111111111";
+        String message = "11111111";
         // 首先需要计算得知消息的长度
         byte[] sendBytes = message.getBytes("UTF-8");
         // 然后将消息的长度优先发送出去

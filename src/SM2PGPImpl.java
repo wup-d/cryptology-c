@@ -13,7 +13,8 @@ public class SM2PGPImpl {
     @Test
     public void PGPTest() {
 
-        String M = "PGPImpl";
+        String enc_m = "PGPImpl SUCCESS!";
+        System.out.println("source info : " + enc_m);
 
         // generate privateKey and publicKey.
         KeyPair pair = SecureUtil.generateKeyPair("SM2");
@@ -23,21 +24,22 @@ public class SM2PGPImpl {
         // generate symmetricCrypto obj.
         SymmetricCrypto symmetricCrypto = new SymmetricCrypto("RC2");
 
-        // Symmetric encryption.
-        byte[] sym_encrypt = symmetricCrypto.encrypt(M.getBytes());
+        // symmetric encryption.
+        byte[] sym_encrypt = symmetricCrypto.encrypt(enc_m);
 
+        // generate sm2 obj.
         SM2 sm2 = SmUtil.sm2(privateKey, publicKey);
 
         // publicKey encryption.
-        String encrypt = sm2.encryptBcd(M, KeyType.PublicKey);
-        System.out.println("encrypt: " + encrypt);
+        byte[] encrypt = sm2.encrypt(sym_encrypt, KeyType.PublicKey);
 
         // privateKey decryption.
-        String decrypt = StrUtil.utf8Str(sm2.decryptFromBcd(encrypt, KeyType.PrivateKey));
-        System.out.println("decrypt: " + decrypt);
+        byte[] decrypt = sm2.decrypt(encrypt, KeyType.PrivateKey);
 
-        // Symmetric decryption.
-        byte[] sym_decrypt = symmetricCrypto.decrypt(decrypt.getBytes());
-        System.out.println(StrUtil.utf8Str(sym_decrypt));
+        // symmetric decryption.
+        byte[] sym_decrypt = symmetricCrypto.decrypt(decrypt);
+
+        String dec_m = StrUtil.utf8Str(sym_decrypt);
+        System.out.println("double encryption and double decryption after : " + dec_m);
     }
 }

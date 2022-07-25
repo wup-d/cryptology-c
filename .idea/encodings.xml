@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/LengthAttackImpl.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/SM2Impl.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/SM2TwoPartyDecryptImpl/Client.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/SM2TwoPartyDecryptImpl/Server.java" charset="UTF-8" />

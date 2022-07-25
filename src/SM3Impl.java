@@ -182,9 +182,11 @@ public class SM3Impl {
     }
 
     @Test
-    public void SM3Test() throws IOException {
+    public void test() throws IOException {
         String info = "hello cryptology!";
-        System.out.println(SM3Impl.byteArrayToHexString(SM3Impl.hash(info.getBytes())));
+        String enc_info = SM3Impl.byteArrayToHexString(SM3Impl.hash(info.getBytes()));
+        System.out.println("source info : " + info);
+        System.out.println("encrypt info : " + enc_info);
         ;
     }
 }

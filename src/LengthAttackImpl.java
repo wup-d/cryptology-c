@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 /**
  * example for length extension attack.
  */
-public class SM3LengthAttackImpl {
+public class LengthAttackImpl {
     private static final String[] IV_C = {
             "422f0657b5b92e635ebb918f8833bf5b", "4f4fdbb59e273255aa901b13fce6ef6e",
             "fd6e8dff7bd95abeb645135ca18bba95", "ba991d0f2a8ca27e61b9459499eeece6"};
@@ -19,16 +19,13 @@ public class SM3LengthAttackImpl {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     @Test
-    public void test(String[] args) {
+    public void test() {
         String a1 = recovery(IV_C[0], IV_C[1], "", 15, 0);
         String m1 = XOR(a1, IV_C[0]);
         String a2 = recovery(IV_C[1], IV_C[2], "", 15, 0);
         String m2 = XOR(a2, IV_C[1]);
         String m3 = paddingTrack(2, 3);
-        System.out.println("m1: " + m1);
-        System.out.println("m2: " + m2);
-        System.out.println("m3: " + m3);
-        System.out.println("m: " + m1 + m2 + m3);
+        System.out.println("recovery info : " + m1 + m2 + m3);
     }
 
     private static String paddingTrack(int index1, int index2) {
@@ -51,11 +48,11 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * »Ö¸´·½·¨
+     * æ¢å¤ç»„ä¸ªæ¯”ç‰¹é•¿åº¦
      */
     private static String recovery(String r, String y, String a, int index, int cnt) {
         for (int i = index; i >= 0; i--) {
-            System.out.println(a + " -- " + cnt);
+            System.out.println(a + " <-- " + cnt);
             String r_left = r.substring(0, i << 1);
             String r_right = XOR(generate(cnt + 1).substring(2), a);
             for (String s : iterator()) {
@@ -69,7 +66,7 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * µü´ú·½·¨
+     * è¿­ä»£ç”Ÿæˆæ‰€æœ‰æµ‹è¯•å¯èƒ½
      */
     private static String[] iterator() {
         String[] res = new String[256];
@@ -88,7 +85,7 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * Éú³É×éºÏ
+     * ç”Ÿæˆç»„åˆå¯èƒ½
      */
     private static String generate(int target) {
         StringBuilder sb = new StringBuilder();
@@ -99,7 +96,7 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * Á½¸öÆ¬¶ÎµÄÒì»ò²Ù×÷
+     * å¼‚æˆ–æ“ä½œ
      */
     private static String XOR(String R1, String R2) {
         R1 = hexadecimalToBinary(R1);
@@ -113,7 +110,7 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * Ê®Áù½øÖÆ×ª¶þ½øÖÆ
+     * åè¿›åˆ¶è½¬äºŒè¿›åˆ¶
      */
     private static String hexadecimalToBinary(String s) {
         int n = s.length();
@@ -134,7 +131,7 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * ¶þ½øÖÆ×ªÊ®½øÖÆ
+     * äºŒè¿›åˆ¶è½¬åè¿›åˆ¶
      */
     private static String binaryToHexadecimal(String s) {
         int n = s.length();
@@ -170,10 +167,9 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * ¼ÓÃÜ²âÊÔ
+     * åŠ å¯†æµ‹è¯•
      */
     private static String encrypt(String info) {
-        // Ö´ÐÐexe: cmd = exe´æ·ÅÂ·¾¶ + ¿Õ¸ñ + µ÷ÓÃ exe Ê±ÐèÒª´«ÈëµÄ²ÎÊý.
         String cmd = "D:/Users/27552/Desktop/PaddingOracleExp/12/enc_oracle.exe " + info;
         BufferedReader br = null;
         BufferedReader brError = null;
@@ -184,7 +180,6 @@ public class SM3LengthAttackImpl {
             br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             brError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             while ((line = br.readLine()) != null || (line = brError.readLine()) != null) {
-                // System.out.println(line);
                 res = line;
             }
         } catch (Exception e) {
@@ -202,10 +197,9 @@ public class SM3LengthAttackImpl {
     }
 
     /**
-     * ½âÃÜ²âÊÔ
+     * è§£å¯†æµ‹è¯•
      */
     private static boolean decrypt(String info) {
-        // Ö´ÐÐexe: cmd = exe´æ·ÅÂ·¾¶ + ¿Õ¸ñ + µ÷ÓÃ exe Ê±ÐèÒª´«ÈëµÄ²ÎÊý.
         String cmd = "D:/Users/27552/Desktop/PaddingOracleExp/12/dec_oracle.exe " + info;
         BufferedReader br = null;
         BufferedReader brError = null;
