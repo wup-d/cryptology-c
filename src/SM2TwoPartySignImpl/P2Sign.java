@@ -1,4 +1,4 @@
 package SM2TwoPartySignImpl;
 
-public class SignClient {
+public class P2Sign {
 }

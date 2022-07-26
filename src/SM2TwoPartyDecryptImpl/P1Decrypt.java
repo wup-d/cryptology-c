@@ -5,7 +5,7 @@ import SM2Impl.SM2;
 
 import java.math.BigInteger;
 
-public class DecryptClient {
+public class P1Decrypt {
     public static void main(String args[]) throws Exception {
 
         SM2 sm2 = new SM2();
