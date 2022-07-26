@@ -11,7 +11,7 @@ import java.security.KeyPair;
 public class SM2PGPImpl {
 
     @Test
-    public void PGPTest() {
+    public void test() {
 
         String enc_m = "PGPImpl SUCCESS!";
         System.out.println("source info : " + enc_m);
