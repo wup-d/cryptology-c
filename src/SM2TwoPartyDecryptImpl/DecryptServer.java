@@ -24,6 +24,7 @@ public class DecryptServer {
                 try {
                     // 建立好连接后，从socket中获取输入流，并建立缓冲区进行读取
                     InputStream inputStream = socket.getInputStream();
+
                     byte[] bytes = new byte[1024];
                     int len;
                     StringBuilder sb = new StringBuilder();
@@ -31,7 +32,7 @@ public class DecryptServer {
                         // 注意指定编码格式，发送方和接收方一定要统一，建议使用UTF-8
                         sb.append(new String(bytes, 0, len, "UTF-8"));
                     }
-//                    System.out.println("smg from client: " + sb);
+                    System.out.println("smg from client: " + sb);
                     inputStream.close();
                     socket.close();
                 } catch (Exception e) {
