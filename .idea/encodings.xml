@@ -3,8 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/LengthAttackImpl.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/SM2Impl.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/SM2TwoPartyDecryptImpl/DecryptClient.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/SM2TwoPartyDecryptImpl/DecryptServer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/SM2TwoPartyDecryptImpl/P1Decrypt.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/SM2TwoPartyDecryptImpl/P2Decrypt.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/SM3Impl.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>

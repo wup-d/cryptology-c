@@ -9,7 +9,7 @@ public class KeyPair {
     private ECPoint publicKey;
     private BigInteger privateKey;
 
-    KeyPair(ECPoint publicKey, BigInteger privateKey) {
+    public KeyPair(ECPoint publicKey, BigInteger privateKey) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
     }
